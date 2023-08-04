@@ -42,4 +42,19 @@ class Handler extends ExceptionHandler
             'message' => 'Internal Server Error',
         ], Response::HTTP_INTERNAL_SERVER_ERROR);
     }
+
+
+    public function report(Throwable $exception)
+    {
+        if ($this->shouldReport($exception)) {
+            $logEntry = new ErrorLog();
+            $logEntry->request_id = request()->request_id;
+            $logEntry->error_type = get_class($exception);
+            $logEntry->error_message = $exception->getMessage();
+            $logEntry->error_trace = $exception->getTraceAsString();
+            $logEntry->save();
+
+            Log::error($exception);
+        }
+    }
 }
