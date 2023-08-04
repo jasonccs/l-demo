@@ -2,9 +2,11 @@
 
 namespace App\Exceptions;
 
+use ErrorLog;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Log;
+use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -30,7 +32,7 @@ class Handler extends ExceptionHandler
                 'status' => 'error',
                 'message' => 'Validation failed',
                 'errors' => $exception->errors(),
-            ], Response::HTTP_BAD_REQUEST);
+            ], ResponseAlias::HTTP_BAD_REQUEST);
         }
 
         if (config('app.debug')) {
@@ -40,7 +42,7 @@ class Handler extends ExceptionHandler
         return new JsonResponse([
             'status' => 'error',
             'message' => 'Internal Server Error',
-        ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        ], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
     }
 
 
