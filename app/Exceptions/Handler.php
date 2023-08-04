@@ -3,6 +3,8 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -21,10 +23,23 @@ class Handler extends ExceptionHandler
     /**
      * Register the exception handling callbacks for the application.
      */
-    public function register(): void
+    public function render($request, Throwable $exception)
     {
-        $this->reportable(function (Throwable $e) {
-            //
-        });
+        if ($exception instanceof ValidationException) {
+            return new JsonResponse([
+                'status' => 'error',
+                'message' => 'Validation failed',
+                'errors' => $exception->errors(),
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        if (config('app.debug')) {
+            return parent::render($request, $exception);
+        }
+
+        return new JsonResponse([
+            'status' => 'error',
+            'message' => 'Internal Server Error',
+        ], Response::HTTP_INTERNAL_SERVER_ERROR);
     }
 }
