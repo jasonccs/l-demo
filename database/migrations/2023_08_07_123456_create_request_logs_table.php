@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 
 
-class CreateRequestLogsTable extends Migration
+return new class extends Migration
 {
     public function up()
     {
@@ -23,4 +23,12 @@ class CreateRequestLogsTable extends Migration
             $table->timestamp('created_at')->useCurrent();
         });
     }
-}
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('request_logs');
+    }
+};

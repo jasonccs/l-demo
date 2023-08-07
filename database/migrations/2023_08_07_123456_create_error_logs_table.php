@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 
 
-class CreateErrorLogsTable extends Migration
+return new class extends Migration
 {
     public function up()
     {
@@ -22,4 +22,12 @@ class CreateErrorLogsTable extends Migration
             $table->timestamps();
         });
     }
-}
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('error_logs');
+    }
+};

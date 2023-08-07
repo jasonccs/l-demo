@@ -1,7 +1,10 @@
 <?php
 
+use App\Http\Controllers\Controller;
+use App\Models\utils\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Rap2hpoutre\LaravelLogViewer\LogViewerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,30 +17,39 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// 日志插件
+Route::get('logs', [LogViewerController::class, 'index']);
 
-Route::get('/request', function (Request $request) {
-    return response()->json([
-        'status' => 'success',
-        'request' => $request->all(),
-    ]);
+ // a法，返回请求内容。
+Route::get('/a', function (Request $request) {
+    $user = [
+        'name'=>1,
+        'age'=>19
+    ];
+    return JsonResponse::success(['user' => $user]);
 });
 
-Route::post('/request', function (Request $request) {
-    return response()->json([
-        'status' => 'success',
-        'request' => $request->all(),
-    ]);
+//  b法，返回请求内容。
+Route::post('/b', function (Request $request) {
+    $user = [
+        'name'=>1,
+        'age'=>19
+    ];
+    return JsonResponse::success(['user' => $user]);
 });
 
-Route::get('/expected-error', function () {
-    abort(400, 'Expected Error');
+//抛出预期的错误，例如请求字段格式错误
+
+Route::get('/c', [Controller::class, 'store']);
+
+//，d法 抛出意外的错误。
+Route::post('/d', function (Request $request) {
+    $c = 0;
+    $res = 1/$c;
 });
 
-Route::get('/unexpected-error', function () {
-    throw new Exception('Unexpected Error');
-});
-
-Route::get('/validate-brackets', function (Request $request) {
+//  使用URL查询参数's'进行以下逻辑测试。
+Route::get('/e', function (Request $request) {
     $s = $request->input('s');
 
     $stack = [];
@@ -49,26 +61,16 @@ Route::get('/validate-brackets', function (Request $request) {
 
     foreach (str_split($s) as $char) {
         if (in_array($char, array_values($brackets))) {
-            array_push($stack, $char);
+            $stack[] = $char;
         } elseif (in_array($char, array_keys($brackets))) {
             if (empty($stack) || array_pop($stack) !== $brackets[$char]) {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Invalid brackets',
-                ], 400);
+                return JsonResponse::error($s.'不符合规范', 400);
             }
         }
     }
-
     if (empty($stack)) {
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Valid brackets',
-        ]);
+        return JsonResponse::success(null,$s.'符合规范');
     } else {
-        return response()->json([
-            'status' => 'error',
-            'message' => 'Invalid brackets',
-        ], 400);
+        return JsonResponse::error($s.'不符合规范', 400);
     }
 });
