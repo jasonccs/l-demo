@@ -22,7 +22,6 @@ class Controller extends BaseController
             return JsonResponse::error(['errors' => $errors], 400);
         }
         // 验证通过，继续处理逻辑...
-         return JsonResponse::success([], '保存成功');
+        return JsonResponse::success([], '保存成功');
     }
-
 }

@@ -25,6 +25,7 @@ class JsonResponse
             'message' => $message,
             'data' => $data,
         ];
-        return response()->json($response, $statusCode,[],JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
+
+        return response()->json($response, $statusCode, [], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
     }
 }

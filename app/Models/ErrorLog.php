@@ -11,12 +11,13 @@ use Illuminate\Database\Eloquent\Model;
 class ErrorLog extends Model
 {
     protected $primaryKey = 'id';
+
     protected $fillable = [
         'request_id',
         'error_type',
         'error_message',
         'error_trace',
     ];
-    protected $guarded = [];
 
+    protected $guarded = [];
 }

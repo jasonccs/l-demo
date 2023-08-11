@@ -20,21 +20,23 @@ use Rap2hpoutre\LaravelLogViewer\LogViewerController;
 // 日志插件
 Route::get('logs', [LogViewerController::class, 'index']);
 
- // a法，返回请求内容。
+// a法，返回请求内容。
 Route::get('/a', function (Request $request) {
     $user = [
-        'name'=>1,
-        'age'=>19
+        'name' => 1,
+        'age' => 19,
     ];
+
     return JsonResponse::success(['user' => $user]);
 });
 
 //  b法，返回请求内容。
 Route::post('/b', function (Request $request) {
     $user = [
-        'name'=>1,
-        'age'=>19
+        'name' => 1,
+        'age' => 19,
     ];
+
     return JsonResponse::success(['user' => $user]);
 });
 
@@ -45,7 +47,7 @@ Route::get('/c', [Controller::class, 'store']);
 //，d法 抛出意外的错误。
 Route::post('/d', function (Request $request) {
     $c = 0;
-    $res = 1/$c;
+    $res = 1 / $c;
 });
 
 //  使用URL查询参数's'进行以下逻辑测试。
@@ -69,7 +71,7 @@ Route::get('/e', function (Request $request) {
         }
     }
     if (empty($stack)) {
-        return JsonResponse::success(null,$s.'符合规范');
+        return JsonResponse::success(null, $s.'符合规范');
     } else {
         return JsonResponse::error($s.'不符合规范', 400);
     }

@@ -60,7 +60,7 @@ class TelescopeServiceProvider extends TelescopeApplicationServiceProvider
             return in_array($user->email, [
                 //
                 'taylor@laravel.com',
-                'shiquansong@qq.com'
+                'shiquansong@qq.com',
             ]);
         });
     }

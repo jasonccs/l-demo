@@ -43,6 +43,7 @@ class User extends Authenticatable
         'name' => 'required|between:2,6',
         'password' => 'required|numeric',
     ];
+
     public function validateRequest($requestData): ?\Illuminate\Support\MessageBag
     {
         $rules = [
@@ -62,8 +63,7 @@ class User extends Authenticatable
         if ($validator->fails()) {
             return $validator->errors();
         }
+
         return null; // 验证通过，返回 null
     }
-
-
 }

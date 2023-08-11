@@ -39,18 +39,18 @@ class Handler extends ExceptionHandler
     public function render($request, Throwable $exception): \Illuminate\Http\Response|\Illuminate\Http\JsonResponse|ResponseAlias|\Illuminate\Http\RedirectResponse
     {
 
-        if (!config('app.debug')) {
-            return  JsonResponse::error('Internal Server Error', ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
+        if (! config('app.debug')) {
+            return JsonResponse::error('Internal Server Error', ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
         }
         if ($exception instanceof ValidationException) { //bad req
-            return  JsonResponse::error($exception->errors(), ResponseAlias::HTTP_BAD_REQUEST);
-        }else if ($exception instanceof NotFoundHttpException){ //404
-            return  JsonResponse::error($exception->getMessage(), ResponseAlias::HTTP_NOT_FOUND);
+            return JsonResponse::error($exception->errors(), ResponseAlias::HTTP_BAD_REQUEST);
+        } elseif ($exception instanceof NotFoundHttpException) { //404
+            return JsonResponse::error($exception->getMessage(), ResponseAlias::HTTP_NOT_FOUND);
         }
-        return  JsonResponse::error($exception->getMessage(), ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
+
+        return JsonResponse::error($exception->getMessage(), ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
 
     }
-
 
     public function report(Throwable $exception)
     {

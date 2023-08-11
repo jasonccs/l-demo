@@ -5,7 +5,6 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use RequestLog;
-use Symfony\Component\HttpFoundation\Response;
 
 class LogRequestMiddleware
 {
@@ -20,6 +19,7 @@ class LogRequestMiddleware
         $logEntry->request_data = json_encode($request->all());
         $logEntry->response_content = $response->getContent();
         $logEntry->save();
+
         return $response;
     }
 }
